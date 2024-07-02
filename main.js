@@ -91,7 +91,7 @@ function start(client) {
       startInactivityTimer(client, from, user); // Inicia o temporizador de inatividade
     } else if (msg === '2' || msg.includes('anúncio') || msg === '3' || msg.includes('atendente')) {
       client.sendText(from, 'Que maravilha 🤩\n\nPor favor, para agilizar o seu atendimento, nos envie o print do anúncio\n\nVamos passar o seu contato para alguém do nosso time.\n\n*Por favor, aguarde...*');
-      notifyAdmin(client, from, user.nome, 'solicitou atendimento -> ainda não é cliente'); // Notificar o administrador
+      notifyAdmin(client, from, user.nome, 'solicitou atendimento -> ainda não é cliente e está na etapa em que já tem o print do anúncio'); // Notificar o administrador
       endSession(from); // Encerrar atendimento
     } else {
       client.sendText(from, '*Por favor, digite uma opção válida.*');

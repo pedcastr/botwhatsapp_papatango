@@ -1,6 +1,6 @@
-const venom = require('venom-bot');
-const natural = require('natural');
-const { getCustomerData } = require('./airtable');
+const venom = require('venom-bot'); // biblioteca venom
+const natural = require('natural'); // biblioteca de aproximação de palavras -> responsável quando o usuário não digita a opção correta, porém envia algo se assemelha a sua dúvida a opção que de fato ele deveria ter digitado
+const { getCustomerData } = require('./airtable'); // banco de dados online 
 
 venom
   .create({
@@ -22,10 +22,10 @@ function start(client) {
   };
 
   const optionHandler = {
-    2: handleStep2,
-    4: handleStep4,
-    5: handleStep5,
-    6: handleStep6
+    2: handleStep2,     // Etapa -> decisão if (Cliente || Futuro Cliente)
+    4: handleStep4,     // Etapa -> Cliente
+    5: handleStep5,     // Etapa -> Futuro cliente
+    6: handleStep6      // Etapa -> (Precisa de mais ajuda || Encerrar atendimento)
   };
 
   function findClosestOption(step, input) {
@@ -43,11 +43,11 @@ function start(client) {
 
     return bestMatch;
   }
-
+// ------------------------------------Etapa -> decisão if (Cliente || Futuro Cliente)-----------------------------------
   function handleStep2(client, from, msg, user) {
     if (msg === '1' || msg.includes('cliente')) {
       client.sendText(from, 'Por favor, digite seu *CPF/CNPJ* para continuar');
-      user.step++;
+      user.step++; // Enviando o processo para a próxima etapa 
     } else if (msg === '2' || msg.includes('preços') || msg.includes('catálogos') || msg.includes('melhor empresa')) {
       client.sendText(from, 'Ficamos felizes em saber do seu interesse 😍\n\nDigite a opção desejada:\n\n*1* - Motos disponíveis\n*2* - Vi o seu anúncio em alguma plataforma, já estou com o print do anúncio e quero fechar negócio\n*3* - Falar com atendente');
       user.step = 5; // Vai para a etapa de interesse
@@ -55,24 +55,28 @@ function start(client) {
       client.sendText(from, '*Por favor, digite uma opção válida.*');
     }
   }
-
+// --------------------------------------------------Etapa -> Cliente----------------------------------------------------
   function handleStep4(client, from, msg, user) {
     if (msg === '1' || msg.includes('pagar semana')) {
       client.sendText(from, 'Clique no link abaixo para ser direcionado ao site de pagamentos:\n*https://nubank.com.br/cobrar/5hiuf/66816b96-7614-418c-bc0a-ee918e7d45f7*');
-      client.sendText(from, 'Após clicar adicione o valor da semana conforme acordado ❤️');
+      client.sendText(from, 'Após clicar, adicione o valor da semana conforme acordado ❤️');
+      client.sendText(from, 'Após realizar o pagamento, por favor, *envie o comprovante bancário*');
       client.sendText(from, 'Podemos lhe ajudar em algo mais?\n\nDigite a opção desejada:\n\n*1* - Sim\n*2* - Não');
-      user.step = 6;
+      user.step = 6; // Envia para a etapa -> Escolher se precisa de mais ajuda ou não
       startInactivityTimer(client, from, user); // Inicia o temporizador de inatividade
     } else if (msg === '2' || msg.includes('problemas')) {
       client.sendText(from, `*${user.nome}*\nVamos passar o seu contato para alguém do nosso time.\nPor favor, aguarde...`);
+      client.sendText(from, `*${user.nome}*\n\n*Atenção*\n\nO nosso horário de atendimento é de *Segunda à Domingo* de *7h às 21h*\n\nCaso *não* estejamos *dentro do nosso horário de atendimento*, *envie sua mensagem* que dentro do nosso expediente lhe *responderemos...*`);
       notifyAdmin(client, from, user.nome, 'problemas com o veículo'); // Notificar o administrador
       endSession(from); // Encerrar atendimento
     } else if (msg === '3' || msg.includes('emergência')) {
       client.sendText(from, 'Lembre-se é de suma importância entrar imediatamente em contato com as autoridades competentes.\n\n*190 - Polícia Militar*\n*191 - PRF*\n*192 - SAMU*\n*193 - Bombeiros*\n\nPor favor, aguarde...\nVamos passar o seu contato para alguém do nosso time.');
+      client.sendText(from, `*${user.nome}*\n\n*Atenção*\n\nO nosso horário de atendimento é de *Segunda à Domingo* de *7h às 21h*\n\nCaso *não* estejamos *dentro do nosso horário de atendimento*, *pode nos ligar* em caso de *emergência*`);
       notifyAdmin(client, from, user.nome, 'emergência'); // Notificar o administrador
       endSession(from); // Encerrar atendimento
     } else if (msg === '4' || msg.includes('atendente')) {
-      client.sendText(from, 'Vamos passar o seu contato para alguém do nosso time.\n*Por favor, aguarde...*');
+      client.sendText(from, 'Vamos passar o seu contato para alguém do nosso time.\n\n*Por favor, aguarde...*');
+      client.sendText(from, `*${user.nome}*\n\n*Atenção*\n\nO nosso horário de atendimento é de *Segunda à Domingo* de *7h às 21h*\n\nCaso *não* estejamos *dentro do nosso horário de atendimento*, *envie sua mensagem* que dentro do nosso expediente lhe *responderemos...*`);
       notifyAdmin(client, from, user.nome, 'solicitou atendimento -> já é cliente'); // Notificar o administrador
       endSession(from); // Encerrar atendimento
     } else if (msg === '5' || msg.includes('encerrar')) {
@@ -82,25 +86,32 @@ function start(client) {
       client.sendText(from, '*Por favor, digite uma opção válida.*');
     }
   }
-
+// ----------------------------------------------Etapa -> Futuro cliente-------------------------------------------------
   function handleStep5(client, from, msg, user) {
     if (msg === '1' || msg.includes('motos')) {
       client.sendText(from, 'Que maravilha 🤩\nSegue link do nosso catálogo:\n*https://wa.me/p/8185254911577260/558592684035*');
       client.sendText(from, '*Você ficou interessado?*\n\nDigite a opção desejada:\n\n*1* - Sim\n*2* - Não');
-      user.step = 6;
+      user.step = 6; // Envia para a etapa -> Escolher se precisa de mais ajuda ou não
       startInactivityTimer(client, from, user); // Inicia o temporizador de inatividade
-    } else if (msg === '2' || msg.includes('anúncio') || msg === '3' || msg.includes('atendente')) {
+    } else if (msg === '2' || msg.includes('anúncio')) {
       client.sendText(from, 'Que maravilha 🤩\n\nPor favor, para agilizar o seu atendimento, nos envie o print do anúncio\n\nVamos passar o seu contato para alguém do nosso time.\n\n*Por favor, aguarde...*');
+      client.sendText(from, `*${user.nome}*\n\n*Atenção*\n\nO nosso horário de atendimento é de *Segunda à Domingo* de *7h às 21h*\n\nCaso *não* estejamos *dentro do nosso horário de atendimento*, *envie sua mensagem* que dentro do nosso expediente lhe *responderemos...*`);
       notifyAdmin(client, from, user.nome, 'solicitou atendimento -> ainda não é cliente e está na etapa em que já tem o print do anúncio'); // Notificar o administrador
+      endSession(from); // Encerrar atendimento
+    } else if (msg === '3' || msg.includes('atendente')) {
+      client.sendText(from, 'Que maravilha 🤩\n\nVamos passar o seu contato para alguém do nosso time.\n\n*Por favor, aguarde...*');
+      client.sendText(from, `*${user.nome}*\n\n*Atenção*\n\nO nosso horário de atendimento é de *Segunda à Domingo* de *7h às 21h*\n\nCaso *não* estejamos *dentro do nosso horário de atendimento*, *envie sua mensagem* que dentro do nosso expediente lhe *responderemos...*`);
+      notifyAdmin(client, from, user.nome, 'solicitou atendimento -> ainda não é cliente e escolheu falar com atendente'); // Notificar o administrador
       endSession(from); // Encerrar atendimento
     } else {
       client.sendText(from, '*Por favor, digite uma opção válida.*');
-    }
+    } 
   }
-
+// -------------------------------Etapa -> (Precisa de mais ajuda || Encerrar atendimento)-------------------------------
   function handleStep6(client, from, msg, user) {
     if (msg === '1' || msg.includes('sim')) {
       client.sendText(from, `*${user.nome}*\n\nVamos passar o seu contato para alguém do nosso time.\n\n*Por favor, aguarde...*`);
+      client.sendText(from, `*${user.nome}*\n\n*Atenção*\n\nO nosso horário de atendimento é de *Segunda à Domingo* de *7h às 21h*\n\nCaso *não* estejamos *dentro do nosso horário de atendimento*, *envie sua mensagem* que dentro do nosso expediente lhe *responderemos...*`);
       notifyAdmin(client, from, user.nome, 'solicitou atendimento -> Já é cliente e está na etapa de pagamento da semana'); // Notificar o administrador
       endSession(from); // Encerrar atendimento
     } else if (msg === '2' || msg.includes('não')) {
@@ -122,7 +133,7 @@ function start(client) {
       userState[from] = { step: 'paused' };
       userState[from].timer = setTimeout(() => {
         delete userState[from];
-      }, 24 * 60 * 60 * 1000);
+      }, 24 * 60 * 60 * 1000); // Após o bot enviar para o atendimento humano, ele ficará sem responder por 24h após isso, ele retornará a responder normalmente
     }
   }
 
@@ -152,14 +163,16 @@ function start(client) {
     }
 
     const user = userState[from];
-
+//----------------------------------Etapa 0 = Início (Após enviar qualquer mensagem) ------------------------------------
     if (user.step === 0) {
       client.sendText(from, 'Olá! Eu sou o *Papaleguas*, seu atendente virtual. Seja bem vindo(a) a Papa Tango Aluguel de Motos! É um prazer ter você aqui 😁😍\n\n*Qual o seu nome?*');
       user.step++;
+//----------------------------------------------- Etapa 1 = Introdução --------------------------------------------------
     } else if (user.step === 1) {
       user.nome = message.body;
       client.sendText(from, `Olá, *${user.nome}* 🤩\n\nMe conta, você já é nosso cliente?\n\n*1* - Já sou cliente Papa Tango\n*2* - Quero consultar preços, catálogos e fazer parte da melhor empresa de locação de motos 😎`);
       user.step++;
+//--------------------------------- Etapa 2 = Decisão if (Cliente || Futuro Cliente) ------------------------------------
     } else if (user.step === 2) {
       const closestOption = findClosestOption(2, msg) || (quotedMsg && findClosestOption(2, quotedMsg));
       optionHandler[2](client, from, closestOption, user);
@@ -173,12 +186,15 @@ function start(client) {
       } else {
         client.sendText(from, '*CPF/CNPJ não encontrado.*\n\n*Por favor, tente novamente...*');
       }
+// --------------------------------------------------Etapa -> Cliente----------------------------------------------------
     } else if (user.step === 4) {
       const closestOption = findClosestOption(4, msg) || (quotedMsg && findClosestOption(4, quotedMsg));
       optionHandler[4](client, from, closestOption, user);
+// ----------------------------------------------Etapa -> Futuro cliente-------------------------------------------------
     } else if (user.step === 5) {
       const closestOption = findClosestOption(5, msg) || (quotedMsg && findClosestOption(5, quotedMsg));
       optionHandler[5](client, from, closestOption, user);
+// -------------------------------Etapa -> (Precisa de mais ajuda || Encerrar atendimento)-------------------------------
     } else if (user.step === 6) {
       const closestOption = findClosestOption(6, msg) || (quotedMsg && findClosestOption(6, quotedMsg));
       optionHandler[6](client, from, closestOption, user);

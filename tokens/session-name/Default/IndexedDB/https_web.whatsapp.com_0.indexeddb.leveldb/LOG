@@ -1,17 +1,19 @@
-2024/07/02-13:15:41.304 3ff8 Reusing MANIFEST C:\Users\Pedro Castro\OneDrive - MSFT\Documents\botwhatsapp_papatango\tokens\session-name\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
-2024/07/02-13:15:41.305 3ff8 Recovering log #346
-2024/07/02-13:15:41.330 3ff8 Reusing old log C:\Users\Pedro Castro\OneDrive - MSFT\Documents\botwhatsapp_papatango\tokens\session-name\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000346.log 
-2024/07/02-13:15:42.552 3ff8 Level-0 table #353: started
-2024/07/02-13:15:42.571 3ff8 Level-0 table #353: 664541 bytes OK
-2024/07/02-13:15:42.578 3ff8 Delete type=0 #346
-2024/07/02-13:15:42.578 3ff8 Manual compaction at level-0 from '\x00L\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00M\x00\x00\x00' @ 0 : 0; will stop at (end)
-2024/07/02-13:15:43.675 43e0 Compacting 1@1 + 3@2 files
-2024/07/02-13:15:44.484 43e0 Generated table #354@1: 87255 keys, 2237168 bytes
-2024/07/02-13:15:44.543 43e0 Generated table #355@1: 43975 keys, 2244594 bytes
-2024/07/02-13:15:44.634 43e0 Generated table #356@1: 59765 keys, 1733654 bytes
-2024/07/02-13:15:44.634 43e0 Compacted 1@1 + 3@2 files => 6215416 bytes
-2024/07/02-13:15:44.640 43e0 compacted to: files[ 0 0 3 0 0 0 0 ]
-2024/07/02-13:15:44.641 43e0 Delete type=2 #348
-2024/07/02-13:15:44.641 43e0 Delete type=2 #349
-2024/07/02-13:15:44.641 43e0 Delete type=2 #350
-2024/07/02-13:15:44.641 43e0 Delete type=2 #353
+2024/07/02-19:08:25.563 13ac Reusing MANIFEST C:\Users\Pedro Castro\OneDrive - MSFT\Documents\botwhatsapp_papatango\tokens\session-name\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2024/07/02-19:08:25.564 13ac Recovering log #422
+2024/07/02-19:08:25.578 13ac Reusing old log C:\Users\Pedro Castro\OneDrive - MSFT\Documents\botwhatsapp_papatango\tokens\session-name\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000422.log 
+2024/07/02-19:08:29.096 1c84 Level-0 table #430: started
+2024/07/02-19:08:29.112 1c84 Level-0 table #430: 534050 bytes OK
+2024/07/02-19:08:29.118 1c84 Delete type=0 #422
+2024/07/02-19:08:29.119 13ac Manual compaction at level-0 from '\x00V\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00W\x00\x00\x00' @ 0 : 0; will stop at (end)
+2024/07/02-19:08:30.160 13ac Compacting 1@1 + 4@2 files
+2024/07/02-19:08:30.224 13ac Generated table #431@1: 86478 keys, 2237567 bytes
+2024/07/02-19:08:30.285 13ac Generated table #432@1: 66197 keys, 2267403 bytes
+2024/07/02-19:08:30.342 13ac Generated table #433@1: 47847 keys, 2210010 bytes
+2024/07/02-19:08:30.369 13ac Generated table #434@1: 29346 keys, 597396 bytes
+2024/07/02-19:08:30.369 13ac Compacted 1@1 + 4@2 files => 7312376 bytes
+2024/07/02-19:08:30.374 13ac compacted to: files[ 0 0 4 0 0 0 0 ]
+2024/07/02-19:08:30.374 13ac Delete type=2 #424
+2024/07/02-19:08:30.374 13ac Delete type=2 #425
+2024/07/02-19:08:30.374 13ac Delete type=2 #426
+2024/07/02-19:08:30.374 13ac Delete type=2 #427
+2024/07/02-19:08:30.375 13ac Delete type=2 #430

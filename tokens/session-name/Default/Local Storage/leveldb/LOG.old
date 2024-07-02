@@ -1,3 +1,6 @@
-2024/07/02-10:10:33.272 17ec Reusing MANIFEST C:\Users\Pedro Castro\OneDrive - MSFT\Documents\botwhatsapp_papatango\tokens\session-name\Default\Local Storage\leveldb/MANIFEST-000001
-2024/07/02-10:10:33.281 17ec Recovering log #3
-2024/07/02-10:10:33.282 17ec Reusing old log C:\Users\Pedro Castro\OneDrive - MSFT\Documents\botwhatsapp_papatango\tokens\session-name\Default\Local Storage\leveldb/000003.log 
+2024/07/02-13:07:25.099 1dd0 Reusing MANIFEST C:\Users\Pedro Castro\OneDrive - MSFT\Documents\botwhatsapp_papatango\tokens\session-name\Default\Local Storage\leveldb/MANIFEST-000001
+2024/07/02-13:07:25.108 1dd0 Recovering log #6
+2024/07/02-13:07:25.109 1dd0 Reusing old log C:\Users\Pedro Castro\OneDrive - MSFT\Documents\botwhatsapp_papatango\tokens\session-name\Default\Local Storage\leveldb/000006.log 
+2024/07/02-13:08:27.728 32f0 Level-0 table #10: started
+2024/07/02-13:08:27.735 32f0 Level-0 table #10: 13693 bytes OK
+2024/07/02-13:08:27.742 32f0 Delete type=0 #6

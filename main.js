@@ -1,10 +1,10 @@
-const venom = require('venom-bot'); // biblioteca venom
-const natural = require('natural'); // biblioteca de aproximação de palavras -> responsável quando o usuário não digita a opção correta, porém envia algo se assemelha a sua dúvida a opção que de fato ele deveria ter digitado
-const { getCustomerData } = require('./airtable'); // banco de dados online 
+const venom = require('venom-bot');
+const natural = require('natural');
+const { getCustomerData } = require('./airtable');
 
 venom
   .create({
-    session: 'session-name' // Nome da sessão
+    session: 'session-name'
   })
   .then((client) => start(client))
   .catch((erro) => {
@@ -12,20 +12,20 @@ venom
   });
 
 function start(client) {
-  let userState = {}; // Objeto para armazenar o estado do usuário
+  let userState = {};
 
   const options = {
     2: ['1', '2', 'já sou cliente', 'cliente', 'quero consultar preços', 'consultar preços', 'preços', 'catálogos', 'fazer parte', 'melhor empresa'],
-    4: ['1', 'pagar semana', '2', 'problemas com o veículo', 'problemas', '3', 'emergência', '4', 'falar com atendente', '5', 'encerrar atendimento'],
+    4: ['1', 'pagar semana', '2', 'problemas com o veículo', 'problemas', '3', 'emergência', '4', 'falar com atendente', '5', 'informar troca de óleo', '6', 'encerrar atendimento',],
     5: ['1', 'motos disponíveis', 'motos', '2', 'anúncio', '3', 'falar com atendente'],
     6: ['1', 'sim', '2', 'não']
   };
 
   const optionHandler = {
-    2: handleStep2,     // Etapa -> decisão if (Cliente || Futuro Cliente)
-    4: handleStep4,     // Etapa -> Cliente
-    5: handleStep5,     // Etapa -> Futuro cliente
-    6: handleStep6      // Etapa -> (Precisa de mais ajuda || Encerrar atendimento)
+    2: handleStep2,
+    4: handleStep4,
+    5: handleStep5,
+    6: handleStep6
   };
 
   function findClosestOption(step, input) {
@@ -43,6 +43,12 @@ function start(client) {
 
     return bestMatch;
   }
+
+  // Função para envio de mídia
+  async function sendMedia(client, from, mediaPath, caption) {
+    await client.sendFile(from, mediaPath, '', caption);
+  }
+
 // ------------------------------------Etapa -> decisão if (Cliente || Futuro Cliente)-----------------------------------
   function handleStep2(client, from, msg, user) {
     if (msg === '1' || msg.includes('cliente')) {
@@ -63,24 +69,30 @@ function start(client) {
       client.sendText(from, 'Clique no link abaixo para ser direcionado ao site de pagamentos:\n*https://nubank.com.br/cobrar/5hiuf/66816b96-7614-418c-bc0a-ee918e7d45f7*\n\nApós clicar, adicione o valor da semana conforme acordado ❤️');
       client.sendText(from, 'Após realizar o pagamento, por favor, *envie o comprovante bancário*');
       client.sendText(from, 'Podemos lhe ajudar em algo mais?\n\nDigite a opção desejada:\n\n*1* - Sim\n*2* - Não');
-      user.step = 6; // Envia para a etapa -> Escolher se precisa de mais ajuda ou não
-      startInactivityTimer(client, from, user); // Inicia o temporizador de inatividade
+      user.step = 6;
     } else if (msg === '2' || msg.includes('problemas')) {
-      client.sendText(from, 'Vamos passar o seu contato para alguém do nosso time.\n\n*Por favor, aguarde...*\n\n*Atenção*\nO nosso horário de atendimento é *todos os dias* de *7h às 21h*\n\nCaso *não* estejamos *dentro do nosso horário de atendimento*, *entre em contato novamente* dentro do nosso horário de expediente que lhe *responderemos...*');
-      notifyAdmin(client, from, user.nome, 'problemas com o veículo'); // Notificar o administrador
-      endSession(from); // Encerrar atendimento
+      client.sendText(from, 'Vamos passar o seu contato para alguém do nosso time.\n\n*Por favor, aguarde...*\n\n*Atenção*\nO nosso horário de atendimento é *todos os dias* de *7h às 21h*');
+      notifyAdmin(client, from, user.nome, 'problemas com o veículo');
+      endSession(from);
     } else if (msg === '3' || msg.includes('emergência')) {
-      client.sendText(from, 'Lembre-se é de suma importância entrar imediatamente em contato com as autoridades competentes.\n\n*190 - Polícia Militar*\n*191 - PRF*\n*192 - SAMU*\n*193 - Bombeiros*\n\nPor favor, aguarde...\nVamos passar o seu contato para alguém do nosso time.');
-      client.sendText(from, `*Atenção*\n\nO nosso horário de atendimento é de *Segunda à Domingo* de *7h às 21h*\n\nCaso *não* estejamos *dentro do nosso horário de atendimento*, *pode ligar* em caso de *emergência*`);
-      notifyAdmin(client, from, user.nome, 'emergência'); // Notificar o administrador
-      endSession(from); // Encerrar atendimento
+      client.sendText(from, 'Lembre-se é de suma importância entrar imediatamente em contato com as autoridades competentes.\n\n*190 - Polícia Militar*\n*191 - PRF*\n*192 - SAMU*\n*193 - Bombeiros*');
+      notifyAdmin(client, from, user.nome, 'emergência');
+      endSession(from);
     } else if (msg === '4' || msg.includes('atendente')) {
-      client.sendText(from, 'Vamos passar o seu contato para alguém do nosso time.\n\n*Por favor, aguarde...*\n\n*Atenção*\nO nosso horário de atendimento é *todos os dias* de *7h às 21h*\n\nCaso *não* estejamos *dentro do nosso horário de atendimento*, *entre em contato novamente* dentro do nosso horário de expediente que lhe *responderemos...*');
-      notifyAdmin(client, from, user.nome, 'solicitou atendimento -> já é cliente'); // Notificar o administrador
-      endSession(from); // Encerrar atendimento
-    } else if (msg === '5' || msg.includes('encerrar')) {
+      client.sendText(from, 'Vamos passar o seu contato para alguém do nosso time.\n\n*Por favor, aguarde...*\n\n*Atenção*\nO nosso horário de atendimento é *todos os dias* de *7h às 21h*');
+      notifyAdmin(client, from, user.nome, 'solicitou atendimento -> já é cliente');
+      endSession(from);
+    } else if (msg === '5' || msg.includes('troca de óleo')) {
+      client.sendText(from, 'É preciso realizar a troca de óleo da moto a cada *1.000 kms* (deverá ser colocado *óleo de viscosidade 10w30*) conforme cláusula 4.1 do contrato de locação.\n\nRecomendamos que seja colocado o óleo Mobil 10w30, mas pode ser realizado a troca por qualquer outro oléo de sua preferência desde que seja com viscosidade 10w30.');
+      sendMedia(client, from, './media/clausula-contrato.png', 'Cláusula 4.1 do contrato de locação');
+      sendMedia(client, from, './media/troca-oleo.mp4', 'Exemplo de vídeo que precisa ser feito e enviado para nós');
+      sendMedia(client, from, './media/foto-recomendacoes.png', 'Recomendações quando for trocar o óleo');
+      sendMedia(client, from, './media/oleo-mobil.png', 'Este é o óleo que recomendamos');
+      client.sendText(from, '*Envie essas informações abaixo*');
+      endSession(from);
+    } else if (msg === '6' || msg.includes('encerrar')) {
       client.sendText(from, `Papa Tango Aluguel de Motos agradece o seu contato! Volte sempre ❤️🙏`);
-      endSession(from, true); // Encerrar atendimento e reiniciar
+      endSession(from, true);
     } else {
       client.sendText(from, '*Por favor, digite uma opção válida.*');
     }
@@ -191,7 +203,7 @@ function start(client) {
       }
     } else if (user.step === 'confirm_name') {
       if (msg === '1' || msg.includes('sim')) {
-        client.sendText(from, `Ótimo, *${user.nome}*! Vamos prosseguir com o atendimento.\n\nDigite uma das opções:\n\n*1* - Pagar semana\n*2* - Problemas com o veículo\n*3* - Emergência\n*4* - Falar com atendente\n*5* - Encerrar atendimento`);
+        client.sendText(from, `Ótimo, *${user.nome}*! Vamos prosseguir com o atendimento.\n\nDigite uma das opções:\n\n*1* - Pagar semana\n*2* - Problemas com o veículo\n*3* - Emergência\n*4* - Falar com atendente\n*5* - Informar troca de óleo\n*6* - Encerrar atendimento`);
         user.step = 4; // Próxima etapa
         startInactivityTimer(client, from, user);
       } else if (msg === '2' || msg.includes('não')) {

@@ -1,3 +1,5 @@
-2024/12/05-22:50:52.034 628 Reusing MANIFEST C:\Users\Pedro\Documents\bot\botwhatsapp_papatango\tokens\session-name\Default\Local Storage\leveldb/MANIFEST-000001
-2024/12/05-22:50:52.040 628 Recovering log #4
-2024/12/05-22:50:52.041 628 Reusing old log C:\Users\Pedro\Documents\bot\botwhatsapp_papatango\tokens\session-name\Default\Local Storage\leveldb/000004.log 
+2024/12/06-14:49:03.095 1d28 Reusing MANIFEST C:\Users\Pedro\Documents\bot\botwhatsapp_papatango\tokens\session-name\Default\Local Storage\leveldb/MANIFEST-000001
+2024/12/06-14:49:03.102 1d28 Recovering log #8
+2024/12/06-14:49:03.104 1d28 Level-0 table #10: started
+2024/12/06-14:49:03.113 1d28 Level-0 table #10: 14790 bytes OK
+2024/12/06-14:49:03.127 1d28 Delete type=0 #8

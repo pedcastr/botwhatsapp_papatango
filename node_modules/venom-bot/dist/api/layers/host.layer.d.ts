@@ -64,6 +64,10 @@ export declare class HostLayer {
      */
     isLoggedIn(): Promise<boolean>;
     /**
+     * Retrieves information about the host including who is logged in
+     */
+    getHost(): Promise<any>;
+    /**
      * Retrieves Battery Level
      */
     getBatteryLevel(): Promise<number>;

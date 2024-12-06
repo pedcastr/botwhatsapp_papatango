@@ -277,6 +277,12 @@ class HostLayer {
         return await this.page.evaluate(() => WAPI.isLoggedIn());
     }
     /**
+     * Retrieves information about the host including who is logged in
+     */
+    async getHost() {
+        return await this.page.evaluate(() => WAPI.getHost());
+    }
+    /**
      * Retrieves Battery Level
      */
     async getBatteryLevel() {

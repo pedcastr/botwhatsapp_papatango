@@ -221,7 +221,7 @@ class GroupLayer extends retriever_layer_1.RetrieverLayer {
             if (typeof validating === 'object') {
                 return reject(validating);
             }
-            const result = this.page.evaluate((groupId, time) => WAPI.getGroupParticipant(groupId, time), groupId, time);
+            const result = await this.page.evaluate((groupId, time) => WAPI.getGroupParticipant(groupId, time), groupId, time);
             if (result['erro'] == true) {
                 reject(result);
             }

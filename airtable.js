@@ -9,7 +9,7 @@ const base = new Airtable({
 /**
  * Busca os dados do cliente pelo CPF ou CNPJ.
  * @param {string} cpfCnpj - CPF ou CNPJ do cliente.
- * @returns {Promise<{nome: string, cpf: string, cnpj: string, numero: string} | null>} Dados do cliente ou null.
+ * @returns {Promise<{nome: string, cpf: string, cnpj: string, numero: string, endereco: string, moto: string, placa: string, valor: string} | null>} Dados do cliente ou null.
  */
 async function getCustomerData(cpfCnpj) {
   return new Promise((resolve, reject) => {
@@ -25,14 +25,18 @@ async function getCustomerData(cpfCnpj) {
           if (records.length > 0) {
             const record = records[0];
 
-            //console.log('Campos retornados:', record.fields); // LOG TEMPORÁRIO PARA TESTE
+            // Verificar quais campos estão sendo retornados
+            // console.log('Campos retornados:', record.fields);
 
-            // Corrigindo o nome da coluna para 'Nome do Cliente'
             resolve({
-              nome: record.get('Nome do Cliente'), // Nome correto da coluna no Airtable
-              cpf: record.get('CPF'),
-              cnpj: record.get('CNPJ'),
-              numero: record.get('Número do Cliente'),
+              nome: record.get('Nome do Cliente') || '',
+              cpf: record.get('CPF') || '',
+              cnpj: record.get('CNPJ') || '',
+              numero: record.get('Número do Cliente') || '',
+              endereco: record.get('Endereço do Cliente') || '',
+              moto: record.get('Moto Alugada') || '',
+              placa: record.get('Placa da Moto') || '',
+              valor: record.get('Valor da Semana') || '',
             });
           } else {
             resolve(null); // Caso nenhum registro seja encontrado
